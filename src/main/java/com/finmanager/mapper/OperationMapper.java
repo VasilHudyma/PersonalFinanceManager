@@ -1,7 +1,6 @@
 package com.finmanager.mapper;
 
 import com.finmanager.model.Operation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

@@ -26,7 +26,6 @@ public class Category {
     }
 
 
-
     public Long getId() {
         return id;
     }
@@ -83,7 +82,7 @@ public class Category {
         if (this == o) return true;
         if (!(o instanceof Category)) return false;
         Category category = (Category) o;
-        return id == category.id &&
+        return id.equals(category.id) &&
                 name.equals(category.name) &&
                 Objects.equals(description, category.description) &&
                 createdDate.equals(category.createdDate) &&
