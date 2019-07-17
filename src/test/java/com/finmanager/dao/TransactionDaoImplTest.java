@@ -32,6 +32,13 @@ class TransactionDaoImplTest extends BaseTest {
     }
 
     @Test
+    void createTransaction_notExistingForeignKeys() {
+        transaction.setOperationId(Long.MAX_VALUE);
+        transaction.setCategoryId(Long.MAX_VALUE);
+        assertThrows(DbOperationException.class, () -> transactionDao.create(transaction));
+    }
+
+    @Test
     void createTransaction_nullValue() {
         transaction.setSum(null);
         assertThrows(DbOperationException.class, () -> transactionDao.create(transaction));
@@ -61,32 +68,32 @@ class TransactionDaoImplTest extends BaseTest {
     }
 
     @Test
-    void updateTransaction(){
+    void updateTransaction() {
         transaction.setSum(13.99);
         transactionDao.update(transaction);
         assertEquals(transaction, transactionDao.findById(transaction.getId()));
     }
 
     @Test
-    void updateTransaction_invalidId(){
+    void updateTransaction_invalidId() {
         transaction.setId(Long.MAX_VALUE);
-        assertThrows(NotFoundException.class,()->transactionDao.update(transaction));
+        assertThrows(NotFoundException.class, () -> transactionDao.update(transaction));
     }
 
     @Test
-    void updateTransaction_nullValue(){
+    void updateTransaction_nullValue() {
         transaction.setSum(null);
-        assertThrows(DbOperationException.class,()->transactionDao.update(transaction));
+        assertThrows(DbOperationException.class, () -> transactionDao.update(transaction));
     }
 
     @Test
-    void deleteTransaction(){
+    void deleteTransaction() {
         assertTrue(transactionDao.delete(transaction.getId()));
     }
 
     @Test
-    void deleteTransaction_invalidId(){
-        assertThrows(NotFoundException.class,()->transactionDao.delete(Long.MAX_VALUE));
+    void deleteTransaction_invalidId() {
+        assertThrows(NotFoundException.class, () -> transactionDao.delete(Long.MAX_VALUE));
     }
 
     @AfterEach
