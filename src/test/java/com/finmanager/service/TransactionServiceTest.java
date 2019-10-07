@@ -23,7 +23,7 @@ import static org.mockito.Mockito.doReturn;
 @ExtendWith(MockitoExtension.class)
 class TransactionServiceTest {
 
-    private final TransactionDto transactionDto = new TransactionDto(1L, 1L, 1L, 100.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now());
+    private final TransactionDto transactionDto = new TransactionDto(1L, 1L, 1L,1L, 100.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now());
     private TransactionDtoMapper transactionDtoMapper = new TransactionDtoMapper();
 
     @Mock
@@ -58,7 +58,7 @@ class TransactionServiceTest {
 
     @Test
     void findAll() {
-        List<Transaction> transactions = Arrays.asList(transaction, new Transaction(12L, 2L, 1L, 100.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now()));
+        List<Transaction> transactions = Arrays.asList(transaction, new Transaction(12L, 2L, 1L,1L, 100.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now()));
         doReturn(transactions).when(transactionDao).findAll();
 
         List<TransactionDto> transactionDtos = transactionService.findAll();

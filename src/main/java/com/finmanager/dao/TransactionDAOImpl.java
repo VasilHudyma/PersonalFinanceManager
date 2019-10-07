@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository
-public class TransactionDAOImpl implements IDao<Transaction> {
+public class TransactionDAOImpl implements ITransactionDAO {
 
     private JdbcTemplate jdbcTemplate;
     private TransactionMapper transactionMapper;
@@ -86,7 +86,9 @@ public class TransactionDAOImpl implements IDao<Transaction> {
                     transaction.getSum(),
                     transaction.getDescription(),
                     transaction.getUpdatedDate(),
+                    transaction.getUserId(),
                     transaction.getId());
+
         } catch (Exception e) {
             logger.error("Updating transaction: {} error: ", transaction, e);
             throw new DbOperationException("Updating transaction: " + transaction + " error: " + e.getMessage());
@@ -120,6 +122,7 @@ public class TransactionDAOImpl implements IDao<Transaction> {
         ps.setString(4, transaction.getDescription());
         ps.setObject(5, transaction.getCreatedDate());
         ps.setObject(6, transaction.getUpdatedDate());
+        ps.setLong(7,transaction.getUserId());
 
         return ps;
     }
@@ -130,12 +133,27 @@ public class TransactionDAOImpl implements IDao<Transaction> {
         return notFoundException;
     }
 
+    @Override
+    public List<Transaction> getTransactionsByOperationId(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Transaction> getTransactionsByCategoryId(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Transaction> getTransactionsByUserId(Long id) {
+        return null;
+    }
+
     private class Queries {
         static final String SQL_TRANSACTION_CREATE = "INSERT INTO transactions" +
-                "(category_id, operation_id, sum, description, created_date, updated_date) values (?,?,?,?,?,?)";
+                "(category_id, operation_id, sum, description, created_date, updated_date, user_id) values (?,?,?,?,?,?,?)";
         static final String SQL_TRANSACTION_DELETE = "DELETE FROM transactions WHERE id=?";
         static final String SQL_TRANSACTION_FIND_ALL = "SELECT * FROM transactions";
         static final String SQL_TRANSACTION_FIND_BY_ID = "SELECT * FROM transactions WHERE id=?";
-        static final String SQL_TRANSACTION_UPDATE = "UPDATE transactions set category_id = ?, operation_id=?, sum = ?, description=?, updated_date = ? where id = ?";
+        static final String SQL_TRANSACTION_UPDATE = "UPDATE transactions set category_id = ?, operation_id=?, sum = ?, description=?, updated_date = ?, user_id = ? where id = ?";
     }
 }

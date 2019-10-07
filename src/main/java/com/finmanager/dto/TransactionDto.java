@@ -9,6 +9,8 @@ public class TransactionDto {
     private Long id;
     private Long categoryId;
     private Long operationId;
+    private Long userId;
+
     private Double sum;
     private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
@@ -19,14 +21,57 @@ public class TransactionDto {
     public TransactionDto() {
     }
 
-    public TransactionDto(Long id, Long categoryId, Long operationId, Double sum, String description, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public TransactionDto(Long id, Long categoryId, Long operationId, Long userId, Double sum, String description, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.categoryId = categoryId;
         this.operationId = operationId;
+        this.userId = userId;
         this.sum = sum;
         this.description = description;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TransactionDto)) return false;
+        TransactionDto that = (TransactionDto) o;
+        return id.equals(that.id) &&
+                categoryId.equals(that.categoryId) &&
+                operationId.equals(that.operationId) &&
+                userId.equals(that.userId) &&
+                sum.equals(that.sum) &&
+                description.equals(that.description) &&
+                createdDate.equals(that.createdDate) &&
+                updatedDate.equals(that.updatedDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, categoryId, operationId, userId, sum, description, createdDate, updatedDate);
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionDto{" +
+                "id=" + id +
+                ", categoryId=" + categoryId +
+                ", operationId=" + operationId +
+                ", userId=" + userId +
+                ", sum=" + sum +
+                ", description='" + description + '\'' +
+                ", createdDate=" + createdDate +
+                ", updatedDate=" + updatedDate +
+                '}';
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -85,35 +130,4 @@ public class TransactionDto {
         this.updatedDate = updatedDate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TransactionDto)) return false;
-        TransactionDto that = (TransactionDto) o;
-        return id.equals(that.id) &&
-                Objects.equals(categoryId, that.categoryId) &&
-                Objects.equals(operationId, that.operationId) &&
-                Objects.equals(sum, that.sum) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(createdDate, that.createdDate) &&
-                Objects.equals(updatedDate, that.updatedDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, categoryId, operationId, sum, description, createdDate, updatedDate);
-    }
-
-    @Override
-    public String toString() {
-        return "TransactionDto{" +
-                "id=" + id +
-                ", categoryId=" + categoryId +
-                ", operationId=" + operationId +
-                ", sum=" + sum +
-                ", description='" + description + '\'' +
-                ", createdDate=" + createdDate +
-                ", updatedDate=" + updatedDate +
-                '}';
-    }
 }

@@ -19,7 +19,7 @@ class TransactionDaoImplTest extends BaseTest {
     @Autowired
     private IDao<Transaction> transactionDao;
 
-    private Transaction transaction = new Transaction(Long.MAX_VALUE, 1L, 1L, 14.88, "some description", LocalDateTime.now(), LocalDateTime.now());
+    private Transaction transaction = new Transaction(Long.MAX_VALUE, 1L, 1L, 1L, 14.88, "some description", LocalDateTime.now(), LocalDateTime.now());
 
     @BeforeEach
     void createTestTransaction() {
@@ -58,8 +58,8 @@ class TransactionDaoImplTest extends BaseTest {
     void findAllTransactions() {
         cleanTransactions();
         List<Transaction> transactions = Arrays.asList(transactionDao.create(transaction),
-                transactionDao.create(new Transaction(2L, 1L, 1L, 24.88, "second description", LocalDateTime.now(), LocalDateTime.now())),
-                transactionDao.create(new Transaction(3L, 1L, 1L, 34.88, "third description", LocalDateTime.now(), LocalDateTime.now())));
+                transactionDao.create(new Transaction(2L, 1L, 1L, 1L, 24.88, "second description", LocalDateTime.now(), LocalDateTime.now())),
+                transactionDao.create(new Transaction(3L, 1L, 1L, 1L, 34.88, "third description", LocalDateTime.now(), LocalDateTime.now())));
         List<Transaction> transactionsFromDb = transactionDao.findAll();
 
         for (int i = 0; i < transactions.size(); i++) {

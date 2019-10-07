@@ -23,7 +23,7 @@ public class BaseTest {
     private static boolean isInitialized;
 
     @BeforeEach
-    void setupBudgetTests() {
+    void setupTests() {
         if (!isInitialized) {
             setup();
             isInitialized = true;
@@ -39,13 +39,15 @@ public class BaseTest {
 
     static void clearAllTables() {
         jdbcTemplate.batchUpdate(
-                "TRUNCATE TABLE operations, transactions, categories RESTART IDENTITY");
+                "TRUNCATE TABLE operations, transactions, categories, users RESTART IDENTITY");
     }
 
     private void setupQueries() {
         jdbcTemplate.batchUpdate("INSERT INTO operations(name, created_date, updated_date) VALUES ('vytrata','2019-05-05','2019-05-05');",
                 "INSERT INTO categories(name, description, created_date, updated_date) VALUES ('food', 'dsdfg','2019-05-05','2019-05-05');",
-                "INSERT into transactions(category_id, operation_id, sum, description, created_date, updated_date) values (1,1,100.2, 'dsdfg','2019-05-05','2019-05-05')");
+                "insert into users(email,password,name, surname, phone, role) values ('mail@m.com','password','name','surnam','34567754445','USER')",
+                "INSERT into transactions(category_id, operation_id, sum, description, created_date, updated_date, user_id) values (1,1,100.2, 'dsdfg','2019-05-05','2019-05-05',1)"
+                );
 
     }
 
