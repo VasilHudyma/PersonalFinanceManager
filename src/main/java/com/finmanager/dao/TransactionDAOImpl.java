@@ -122,7 +122,7 @@ public class TransactionDAOImpl implements ITransactionDAO {
         ps.setString(4, transaction.getDescription());
         ps.setObject(5, transaction.getCreatedDate());
         ps.setObject(6, transaction.getUpdatedDate());
-        ps.setLong(7,transaction.getUserId());
+        ps.setLong(7, transaction.getUserId());
 
         return ps;
     }
@@ -134,18 +134,39 @@ public class TransactionDAOImpl implements ITransactionDAO {
     }
 
     @Override
-    public List<Transaction> getTransactionsByOperationId(Long id) {
-        return null;
+    public List<Transaction> findTransactionsByOperationId(Long id) {
+        try {
+            return jdbcTemplate.query(Queries.SQL_TRANSACTION_FIND_BY_OPERATION_ID, transactionMapper, id);
+        } catch (EmptyResultDataAccessException | NotFoundException e) {
+            throw getAndLogTransactionNotFoundException(id);
+        } catch (Exception e) {
+            logger.error("Can't get transaction with operation_id = {} Error: ", id, e);
+            throw new DbOperationException("Can't get transaction with operation_id = " + id + " Error: " + e.getMessage());
+        }
     }
 
     @Override
-    public List<Transaction> getTransactionsByCategoryId(Long id) {
-        return null;
+    public List<Transaction> findTransactionsByCategoryId(Long id) {
+        try {
+            return jdbcTemplate.query(Queries.SQL_TRANSACTION_FIND_BY_CATEGORY_ID, transactionMapper, id);
+        } catch (EmptyResultDataAccessException | NotFoundException e) {
+            throw getAndLogTransactionNotFoundException(id);
+        } catch (Exception e) {
+            logger.error("Can't get transaction with category_id = {} Error: ", id, e);
+            throw new DbOperationException("Can't get transaction with category_id = " + id + " Error: " + e.getMessage());
+        }
     }
 
     @Override
-    public List<Transaction> getTransactionsByUserId(Long id) {
-        return null;
+    public List<Transaction> findTransactionsByUserId(Long id) {
+        try {
+            return jdbcTemplate.query(Queries.SQL_TRANSACTION_FIND_BY_USER_ID, transactionMapper, id);
+        } catch (EmptyResultDataAccessException | NotFoundException e) {
+            throw getAndLogTransactionNotFoundException(id);
+        } catch (Exception e) {
+            logger.error("Can't get transaction with user_id = {} Error: ", id, e);
+            throw new DbOperationException("Can't get transaction with user_id = " + id + " Error: " + e.getMessage());
+        }
     }
 
     private class Queries {
@@ -154,6 +175,9 @@ public class TransactionDAOImpl implements ITransactionDAO {
         static final String SQL_TRANSACTION_DELETE = "DELETE FROM transactions WHERE id=?";
         static final String SQL_TRANSACTION_FIND_ALL = "SELECT * FROM transactions";
         static final String SQL_TRANSACTION_FIND_BY_ID = "SELECT * FROM transactions WHERE id=?";
+        static final String SQL_TRANSACTION_FIND_BY_OPERATION_ID = "SELECT * FROM transactions WHERE operation_id=?";
+        static final String SQL_TRANSACTION_FIND_BY_CATEGORY_ID = "SELECT * FROM transactions WHERE category_id=?";
+        static final String SQL_TRANSACTION_FIND_BY_USER_ID = "SELECT * FROM transactions WHERE user_id=?";
         static final String SQL_TRANSACTION_UPDATE = "UPDATE transactions set category_id = ?, operation_id=?, sum = ?, description=?, updated_date = ?, user_id = ? where id = ?";
     }
 }

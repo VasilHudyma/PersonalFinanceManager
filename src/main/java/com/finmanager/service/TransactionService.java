@@ -1,9 +1,8 @@
 package com.finmanager.service;
 
-import com.finmanager.dao.IDao;
+import com.finmanager.dao.ITransactionDAO;
 import com.finmanager.dto.TransactionDto;
 import com.finmanager.dtoMapper.TransactionDtoMapper;
-import com.finmanager.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +10,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TransactionService implements IService<TransactionDto> {
+public class TransactionService implements ITransactionService {
 
-    private IDao<Transaction> transactionDao;
+    private ITransactionDAO transactionDao;
     private TransactionDtoMapper transactionDtoMapper;
 
     @Autowired
-    public TransactionService(IDao<Transaction> transactionDao, TransactionDtoMapper transactionDtoMapper) {
+    public TransactionService(ITransactionDAO transactionDao, TransactionDtoMapper transactionDtoMapper) {
         this.transactionDao = transactionDao;
         this.transactionDtoMapper = transactionDtoMapper;
     }
@@ -45,5 +44,22 @@ public class TransactionService implements IService<TransactionDto> {
     @Override
     public boolean delete(Long id) {
         return transactionDao.delete(id);
+    }
+
+    @Override
+    public List<TransactionDto> getTransactionByOperationId(Long id) {
+        return transactionDao.findTransactionsByOperationId(id).stream().map(transactionDtoMapper::transactionToTransactionDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TransactionDto> getTransactionByCategoryId(Long id) {
+        return transactionDao.findTransactionsByCategoryId(id).stream().map(transactionDtoMapper::transactionToTransactionDto).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<TransactionDto> getTransactionByUserId(Long id) {
+        return transactionDao.findTransactionsByUserId(id).stream().map(transactionDtoMapper::transactionToTransactionDto).collect(Collectors.toList());
+
     }
 }
