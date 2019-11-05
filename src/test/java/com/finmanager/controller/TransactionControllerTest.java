@@ -43,7 +43,7 @@ class TransactionControllerTest {
     void init() {
         MockitoAnnotations.initMocks(this);
 
-        transactionDto = new TransactionDto(1L, 1L, 1L, 100.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now());
+        transactionDto = new TransactionDto(1L, 1L, 1L,1L, 100.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now());
         mockMvc = MockMvcBuilders.standaloneSetup(transactionController)
                 .build();
     }
@@ -84,7 +84,7 @@ class TransactionControllerTest {
 
     @Test
     void findAllCategories() throws Exception {
-        List<TransactionDto> transactionDtos = Arrays.asList(transactionDto, new TransactionDto(12L, 21L, 21L, 1200.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now()));
+        List<TransactionDto> transactionDtos = Arrays.asList(transactionDto, new TransactionDto(12L, 21L, 21L,21L, 1200.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now()));
         doReturn(transactionDtos).when(transactionService).findAll();
 
         mockMvc.perform(get("/transactions/all").contentType(MediaType.APPLICATION_JSON))

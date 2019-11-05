@@ -1,7 +1,7 @@
 package com.finmanager.controller;
 
 import com.finmanager.dto.TransactionDto;
-import com.finmanager.service.IService;
+import com.finmanager.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,10 +13,10 @@ import java.util.List;
 @RequestMapping("/transactions")
 public class TransactionController {
 
-    private IService<TransactionDto> transactionService;
+    private ITransactionService transactionService;
 
     @Autowired
-    public TransactionController(IService<TransactionDto> transactionService) {
+    public TransactionController(ITransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
@@ -29,6 +29,21 @@ public class TransactionController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public TransactionDto findTransactionById(@PathVariable("id") Long id) {
         return transactionService.findById(id);
+    }
+
+    @GetMapping(value = "/categoryId/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<TransactionDto> findTransactionByCategoryId(@PathVariable("id") Long id) {
+        return transactionService.getTransactionByCategoryId(id);
+    }
+
+    @GetMapping(value = "/operationId/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<TransactionDto> findTransactionByOperationId(@PathVariable("id") Long id) {
+        return transactionService.getTransactionByOperationId(id);
+    }
+
+    @GetMapping(value = "/userId/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<TransactionDto> findTransactionByUserId(@PathVariable("id") Long id) {
+        return transactionService.getTransactionByUserId(id);
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -22,6 +22,7 @@ public class TransactionMapper implements RowMapper<Transaction> {
         transaction.setDescription(resultSet.getString("description"));
         transaction.setCreatedDate(resultSet.getObject("created_date", LocalDateTime.class));
         transaction.setUpdatedDate(resultSet.getObject("updated_date", LocalDateTime.class));
+        transaction.setUserId(resultSet.getLong("user_id"));
         return transaction;
     }
 }

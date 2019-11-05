@@ -9,12 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
+@WebAppConfiguration
 @ContextConfiguration(classes = {ProfileConfig.class})
 class TransactionDtoMapperTest {
     private Transaction transaction;
@@ -25,11 +27,12 @@ class TransactionDtoMapperTest {
 
     @BeforeEach
     void init() {
-        transaction = new Transaction(1L, 1L, 1L, 100.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now());
+        transaction = new Transaction(1L, 1L, 1L,1L, 100.1, "transDescrpt", LocalDateTime.now(), LocalDateTime.now());
         transactionDto = new TransactionDto();
         transactionDto.setId(transaction.getId());
         transactionDto.setCategoryId(transaction.getCategoryId());
         transactionDto.setOperationId(transaction.getOperationId());
+        transactionDto.setUserId(transaction.getUserId());
         transactionDto.setSum(transaction.getSum());
         transactionDto.setDescription(transaction.getDescription());
         transactionDto.setCreatedDate(transaction.getCreatedDate());
