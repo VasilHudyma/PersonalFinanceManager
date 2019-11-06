@@ -46,6 +46,7 @@ class CategoryControllerTest {
 
         categoryDto = new CategoryDto(1L, "categ", "oper", LocalDateTime.now(), LocalDateTime.now());
         mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+
                 .build();
     }
 
@@ -112,7 +113,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void deleteOperation() throws Exception {
+    void deleteCategory() throws Exception {
         doReturn(true).when(categoryService).delete(categoryDto.getId());
         MvcResult result = mockMvc.perform(delete("/categories/" + categoryDto.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
