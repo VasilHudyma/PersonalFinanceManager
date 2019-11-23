@@ -3,14 +3,19 @@ package com.finmanager.service;
 import com.finmanager.dao.IUserDAO;
 import com.finmanager.dto.UserDto;
 import com.finmanager.dtoMapper.UserDtoMapper;
+import com.finmanager.model.Role;
+import com.finmanager.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements IUserService {
+public class UserService implements IUserService, UserDetailsService {
 
     private IUserDAO userDAO;
 
@@ -50,5 +55,13 @@ public class UserService implements IUserService {
     @Override
     public boolean delete(Long id) {
         return userDAO.delete(id);
+    }
+
+    @Override
+    public User loadUserByUsername(String s) throws UsernameNotFoundException {
+        User user = userDAO.findByEmail(s);
+        List<Role> roles = Arrays.asList(user.getRole());
+        user.setAuthorities(roles);
+        return user;
     }
 }
