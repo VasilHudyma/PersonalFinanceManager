@@ -23,7 +23,7 @@ public class EncryptionUtil implements PasswordEncoder {
         String algorithm = "SHA";
         byte[] plainText = plainTextPassword.getBytes();
 
-        MessageDigest md = null;
+        MessageDigest md;
 
         try {
             md = MessageDigest.getInstance(algorithm);
@@ -37,12 +37,12 @@ public class EncryptionUtil implements PasswordEncoder {
         byte[] encodedPassword = md.digest();
         StringBuilder encryptedPassword = new StringBuilder();
 
-        for (int i = 0; i < encodedPassword.length; i++) {
-            if ((encodedPassword[i] & 0xff) < 0x10) {
+        for (byte b : encodedPassword) {
+            if ((b & 0xff) < 0x10) {
                 encryptedPassword.append("0");
             }
 
-            encryptedPassword.append(Long.toString(encodedPassword[i] & 0xff, 16));
+            encryptedPassword.append(Long.toString(b & 0xff, 16));
         }
         return encryptedPassword.toString();
     }
