@@ -1,10 +1,13 @@
 package com.finmanager.controller;
 
 import com.finmanager.dto.OperationDto;
+import com.finmanager.dto.Transafer.ExistingRecord;
+import com.finmanager.dto.Transafer.NewRecord;
 import com.finmanager.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +24,7 @@ public class OperationController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public OperationDto createOperation(@RequestBody OperationDto operationDto) {
+    public OperationDto createOperation(@Validated(NewRecord.class) @RequestBody OperationDto operationDto) {
         return operationService.create(operationDto);
     }
 
@@ -39,7 +42,7 @@ public class OperationController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public OperationDto updateOperation(@PathVariable("id") Long id, @RequestBody OperationDto operationDto) {
+    public OperationDto updateOperation(@Validated(ExistingRecord.class) @PathVariable("id") Long id, @RequestBody OperationDto operationDto) {
         operationDto.setId(id);
         return operationService.update(operationDto);
     }

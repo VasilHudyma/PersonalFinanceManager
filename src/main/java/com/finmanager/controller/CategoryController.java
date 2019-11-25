@@ -2,10 +2,13 @@ package com.finmanager.controller;
 
 
 import com.finmanager.dto.CategoryDto;
+import com.finmanager.dto.Transafer.ExistingRecord;
+import com.finmanager.dto.Transafer.NewRecord;
 import com.finmanager.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +25,7 @@ public class CategoryController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public CategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
+    public CategoryDto createCategory(@Validated(NewRecord.class) @RequestBody CategoryDto categoryDto) {
         return categoryService.create(categoryDto);
     }
 
@@ -40,7 +43,7 @@ public class CategoryController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CategoryDto updateCategory(@PathVariable("id") Long id, @RequestBody CategoryDto categoryDto) {
+    public CategoryDto updateCategory(@Validated(ExistingRecord.class) @PathVariable("id") Long id, @RequestBody CategoryDto categoryDto) {
         categoryDto.setId(id);
         return categoryService.update(categoryDto);
     }

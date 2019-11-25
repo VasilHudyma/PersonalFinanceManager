@@ -1,10 +1,12 @@
 package com.finmanager.controller;
 
+import com.finmanager.dto.Transafer.ExistingRecord;
 import com.finmanager.dto.UserDto;
 import com.finmanager.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
-
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDto findUserById(@PathVariable("id") Long id) {
         return userService.findById(id);
@@ -34,7 +34,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
+    public UserDto updateUser(@Validated(ExistingRecord.class) @PathVariable("id") Long id, @RequestBody UserDto userDto) {
         userDto.setId(id);
         return userService.update(userDto);
     }
@@ -43,6 +43,12 @@ public class UserController {
     @DeleteMapping(value = "/{id}")
     public boolean deleteUser(@PathVariable("id") Long id) {
         return userService.delete(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public boolean updatePasswordEmail(@RequestParam("email") String email, @RequestBody String newPassword) {
+        return userService.updatePassword(email, newPassword);
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -1,14 +1,30 @@
 package com.finmanager.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.finmanager.dto.Transafer.ExistingRecord;
+import com.finmanager.dto.Transafer.NewRecord;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class CategoryDto {
+    @Null(groups = {NewRecord.class},
+            message = "This field must be empty due to auto generation")
+    @NotNull(groups = {ExistingRecord.class},
+            message = "This field can't be empty")
     private Long id;
+
+    @NotBlank(groups = {NewRecord.class, ExistingRecord.class},
+            message = "Please, provide an name")
     private String name;
+
+    @NotBlank(groups = {NewRecord.class, ExistingRecord.class},
+            message = "Please, provide an description")
     private String description;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime createdDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")

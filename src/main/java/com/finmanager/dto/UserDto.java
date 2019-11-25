@@ -1,18 +1,49 @@
 package com.finmanager.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.finmanager.dto.Transafer.ExistingRecord;
+import com.finmanager.dto.Transafer.NewRecord;
 import com.finmanager.model.Role;
 
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class UserDto {
+    @Null(groups = {NewRecord.class},
+            message = "This field must be empty due to auto generation")
+    @NotNull(groups = {ExistingRecord.class},
+            message = "This field can't be empty")
     private Long id;
+
+    @NotBlank(groups = {NewRecord.class, ExistingRecord.class},
+            message = "Please, provide an email")
+    @Email(groups = {NewRecord.class, ExistingRecord.class},
+            message = "Please, provide a valid email")
     private String email;
+
+    @NotNull(groups = {NewRecord.class, ExistingRecord.class},
+            message = "This field can't be empty")
+    @Size(min = 6, max = 32)
     private String password;
+
+    @NotBlank(groups = {NewRecord.class, ExistingRecord.class},
+            message = "Please, provide a name")
     private String name;
+
+    @NotBlank(groups = {NewRecord.class, ExistingRecord.class},
+            message = "Please, provide a surname")
     private String surname;
+
+    @NotBlank(groups = {NewRecord.class, ExistingRecord.class},
+            message = "Please provide a phone number")
+    @Pattern(groups = {NewRecord.class, ExistingRecord.class},
+            regexp = "\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}",
+            message = "Please provide a valid phone number")
     private String phone;
+
+    @NotNull(groups = {NewRecord.class, ExistingRecord.class},
+            message = "Please, provide a role")
     private Role role;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime createdDate;

@@ -3,6 +3,7 @@ package com.finmanager.exceptions.interceptor;
 import com.finmanager.exceptions.DbOperationException;
 import com.finmanager.exceptions.InvalidJwtAuthenticationException;
 import com.finmanager.exceptions.NotFoundException;
+import com.finmanager.exceptions.RecordExistsException;
 import com.finmanager.exceptions.json.ExceptionResponse;
 import com.google.common.base.Preconditions;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,19 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ExceptionInterceptor {
+
+    @ResponseStatus(code = HttpStatus.CONFLICT)
+    @ExceptionHandler(RecordExistsException.class)
+    ExceptionResponse recordExistsException(@NonNull HttpServletRequest request,
+                                            @NonNull RecordExistsException ex) {
+        Preconditions.checkNotNull(request.getRequestURI());
+        Preconditions.checkNotNull(ex.getLocalizedMessage());
+
+        return ExceptionResponse.builder()
+                .url(request.getRequestURI())
+                .message(ex.getLocalizedMessage())
+                .build();
+    }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
