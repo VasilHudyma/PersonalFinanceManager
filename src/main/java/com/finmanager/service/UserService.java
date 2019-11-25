@@ -5,6 +5,7 @@ import com.finmanager.dto.UserDto;
 import com.finmanager.dtoMapper.UserDtoMapper;
 import com.finmanager.model.Role;
 import com.finmanager.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +31,11 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public UserDto findUserByEmail(String email) {
         return userDtoMapper.userToUserDto(userDAO.findByEmail(email));
+    }
+
+    @Override
+    public boolean updatePassword(String email, String newPassword) {
+        return userDAO.updatePassword(email, StringUtils.chop(newPassword.substring(1)));
     }
 
     @Override

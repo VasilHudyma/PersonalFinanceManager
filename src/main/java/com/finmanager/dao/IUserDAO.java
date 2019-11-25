@@ -4,4 +4,6 @@ import com.finmanager.model.User;
 
 public interface IUserDAO extends IDao<User> {
     User findByEmail(String email);
+
+    boolean updatePassword(String email, String newPassword);
 }

@@ -1,10 +1,13 @@
 package com.finmanager.controller;
 
 import com.finmanager.dto.TransactionDto;
+import com.finmanager.dto.Transafer.ExistingRecord;
+import com.finmanager.dto.Transafer.NewRecord;
 import com.finmanager.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +25,7 @@ public class TransactionController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public TransactionDto createTransaction(@RequestBody TransactionDto transactionDto) {
+    public TransactionDto createTransaction(@Validated(NewRecord.class) @RequestBody TransactionDto transactionDto) {
         return transactionService.create(transactionDto);
     }
 
@@ -55,7 +58,7 @@ public class TransactionController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public TransactionDto updateTransaction(@PathVariable("id") Long id, @RequestBody TransactionDto transactionDto) {
+    public TransactionDto updateTransaction(@Validated(ExistingRecord.class) @PathVariable("id") Long id, @RequestBody TransactionDto transactionDto) {
         transactionDto.setId(id);
         return transactionService.update(transactionDto);
     }

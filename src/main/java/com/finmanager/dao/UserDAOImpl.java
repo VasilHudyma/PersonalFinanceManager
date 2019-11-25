@@ -86,8 +86,6 @@ public class UserDAOImpl implements IUserDAO {
         try {
             user.setUpdatedDate(LocalDateTime.now());
             rowsAffected = jdbcTemplate.update(Queries.SQL_UPDATE_USER,
-                    user.getEmail(),
-                    user.getPassword(),
                     user.getName(),
                     user.getSurname(),
                     user.getPhone(),
@@ -114,6 +112,27 @@ public class UserDAOImpl implements IUserDAO {
             logger.error("Can't get user with email = {}. Error: ", email, e);
             throw new DbOperationException("Can't get user with email = " + email);
         }
+    }
+
+
+    @Override
+    public boolean updatePassword(String email, String newPassword) {
+        int rowsAffected;
+
+        try {
+            rowsAffected = jdbcTemplate.update(Queries.SQL_UPDATE_PASSWORD,
+                    passwordEncoder.encode(newPassword),
+                    LocalDateTime.now(),
+                    email);
+
+        } catch (Exception e) {
+            logger.error("Updating user error with email: " + email + " " + e.getMessage());
+            throw new DbOperationException("Can't update user with email: " + email);
+        }
+        if (rowsAffected < 1) {
+            throw getAndLogUserNotFoundException(email);
+        }
+        return true;
     }
 
     @Override
@@ -168,6 +187,7 @@ public class UserDAOImpl implements IUserDAO {
         static final String SQL_FIND_USER_BY_ID = "select * from users where id = ?";
         static final String SQL_DELETE_USER = "delete from users where id = ?";
         static final String SQL_FIND_ALL_USERS = "select * from users";
-        static final String SQL_UPDATE_USER = "update users set email = ?, password = ?, name = ?, surname = ?, phone = ?, role = ?, updated_date = ? where id =?";
+        static final String SQL_UPDATE_PASSWORD = "update users set password = ?, updated_date = ? where email = ?";
+        static final String SQL_UPDATE_USER = "update users set name = ?, surname = ?, phone = ?, role = ?, updated_date = ? where id =?";
     }
 }

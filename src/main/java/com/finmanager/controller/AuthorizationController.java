@@ -41,7 +41,7 @@ public class AuthorizationController {
     @PostMapping("/signin")
     public ResponseEntity signIn(@RequestBody AuthenticationRequest data) {
         try {
-            String username = data.getUsername();
+            String username = data.getEmail();
             User user = userDetailsService.loadUserByUsername(username);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             String token = jwtTokenProvider.createToken(username, user.getRole().toString());

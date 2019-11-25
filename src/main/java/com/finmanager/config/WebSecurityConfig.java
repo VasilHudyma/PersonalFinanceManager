@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -70,10 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html",
                         "/webjars/**",
                         "/auth/signin",
-                       // "/forgotPassword/",
-                       // "/forgotPassword/resetPassword",
-                        "/registration"
-                      //  "/socket/**"
+                        "/registration",
+                        "/reset-password/reset"
+
                 ).permitAll()
                 //TODO uncomment when there will be a logic for assigning user roles
                 //.antMatchers(HttpMethod.GET).hasRole("USER")
