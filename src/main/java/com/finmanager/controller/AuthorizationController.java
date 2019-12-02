@@ -45,6 +45,7 @@ public class AuthorizationController {
             User user = userDetailsService.loadUserByUsername(username);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             String token = jwtTokenProvider.createToken(username, user.getRole().toString());
+            System.out.println(user.getRole().toString());
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);
             model.put("token", token);
