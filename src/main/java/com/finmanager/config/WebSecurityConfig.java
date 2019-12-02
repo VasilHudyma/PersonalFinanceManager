@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -47,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //@formatter:off
+
         http.cors().and()
                 .httpBasic().disable()
                 .csrf().disable()
@@ -71,15 +72,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/signin",
                         "/registration",
                         "/reset-password/reset"
-
                 ).permitAll()
-                //TODO uncomment when there will be a logic for assigning user roles
-                //.antMatchers(HttpMethod.GET).hasRole("USER")
-                //.antMatchers(HttpMethod.DELETE, "**/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/categories/**",
+                        "/operations/**", "/transactions/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/categories/**",
+                        "/operations/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/categories/**",
+                        "/operations/**", "/transactions/**", "/users/**").hasAuthority("ADMIN")
+                .antMatchers("/users/all","/transactions/all").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
-        //@formatter:on
     }
 
     @Override
@@ -94,11 +97,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(ImmutableList.of("*"));
         configuration.setAllowedMethods(ImmutableList.of("HEAD",
                 "GET", "POST", "PUT", "DELETE", "PATCH"));
-        // setAllowCredentials(true) is important, otherwise:
-        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
         configuration.setAllowCredentials(true);
-        // setAllowedHeaders is important! Without it, OPTIONS preflight request
-        // will fail with 403 Invalid CORS request
         configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

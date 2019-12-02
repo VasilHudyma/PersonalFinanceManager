@@ -10,7 +10,8 @@ import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 
 @Configuration
-@PropertySource(value = "classpath:application-db.properties")
+//@PropertySource(value = "classpath:application-db.properties")
+@PropertySource(value = "classpath:application-heroku.properties")
 public class DBConfig {
 
     @Value("${db.driver}")
