@@ -28,8 +28,8 @@ public class ResetPasswordService implements IResetPasswordService {
         mailMessage.setTo(email);
         mailMessage.setSubject("New Password");
         mailMessage.setText("Hello! It's your new Password: \n" + newPassword);
-        mailSender.send(mailMessage);
         userDAO.updatePassword(email, newPassword);
+        mailSender.send(mailMessage);
         return true;
     }
 }
